@@ -11,7 +11,7 @@
       >
         <div class="flex items-center p-2.5 w-full">
           <SearchOutlined class="text-xl h-5 flex" />
-          <Input v-model:value="value2" :bordered="false" size="large" />
+          <Input :bordered="false" size="large" />
         </div>
         <div class="border-l h-[56px] flex items-center px-4">
           <Select
@@ -44,22 +44,25 @@ import { ShoppingOutlined, SearchOutlined } from "@ant-design/icons-vue";
 import { h } from "vue";
 import { useSort } from "~/stores/sort";
 import { SORT_CRITERIA } from "~/constants/sort";
-import { watchDebounced } from '@vueuse/core'
+// import { watchDebounced } from '@vueuse/core'
 import { ROUTES } from "~/constants/routes";
 
 const sortStore = useSort()
 const inputField = ref('')
+const route = useRoute();
 const debouncedInputField = ref('')
 
-watchEffect(() => {
-  console.log(sortStore.criteria)
-});
-
-watchDebounced(inputField, () => {
+watch(inputField, () => {
   if(inputField.value) {
     debouncedInputField.value = inputField.value;
   }
-}, { debounce: 1000 });
+});
+
+watch(() => route.query, () => {
+  if(route.query?.sort) {
+    sortStore.setCriteria(route.query.sort);
+  }
+}, { immediate: true })
 
 </script>
 

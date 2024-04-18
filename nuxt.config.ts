@@ -13,7 +13,7 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-  modules: ['@nuxt/eslint', '@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt',],
+  modules: ['@nuxt/eslint', '@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt'],
   pinia: {
     autoImports: ['defineStore'],
   },
