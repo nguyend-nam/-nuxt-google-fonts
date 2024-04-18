@@ -6,6 +6,7 @@ import type { FontItem, GetFontsResponse } from '~/types/fonts.type';
 import { watch } from 'vue';
 import qs from 'qs';
 import { useFilter } from '~/stores/filter';
+import { watchDebounced } from '@vueuse/core';
 
 export const useFetchFonts = async () => {
   const sortStore = useSort();
@@ -60,16 +61,20 @@ export const useFetchFonts = async () => {
     }
   });
 
-  watch([params, filterStore], async () => {
-    router.push({
-      query: {
-        ...(sortStore.criteria !== 'trending' ? { sort: sortStore.criteria } : null),
-        ...(subsetStore.subset !== 'all-languages' ? { subset: subsetStore.subset } : null),
-        ...(filterStore.preview ? { preview: filterStore.preview } : null),
-        ...(filterStore.fontSize !== 40 ? { size: filterStore.fontSize } : null),
-      },
-    });
-  });
+  watchDebounced(
+    [params, filterStore],
+    async () => {
+      router.push({
+        query: {
+          ...(sortStore.criteria !== 'trending' ? { sort: sortStore.criteria } : null),
+          ...(subsetStore.subset !== 'all-languages' ? { subset: subsetStore.subset } : null),
+          ...(filterStore.preview ? { preview: filterStore.preview } : null),
+          ...(filterStore.fontSize !== 40 ? { size: filterStore.fontSize } : null),
+        },
+      });
+    },
+    { debounce: 500 },
+  );
 
   return { fonts, isLoading };
 };
