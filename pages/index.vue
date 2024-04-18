@@ -8,17 +8,29 @@
 
     <div v-if="isLoading">
       <div class="flex flex-col w-full gap-[1px] px-14">
-        <div v-for="(_, index) in new Array(5).fill(true)" :key="index" class="h-[159px] w-full rounded-md bg-gray-100 p-4 animate-pulse"></div>
+        <div
+          v-for="(_, index) in new Array(15).fill(true)"
+          :key="index"
+          class="h-[159px] w-full rounded-md bg-gray-100 p-4 animate-pulse"
+          :style="{ height: `${filterStore.fontSize * 1.5 + 106}px` }"
+        />
       </div>
     </div>
     <div v-else>
-      <div v-bind="containerProps" class="h-[calc(100dvh-88px)] overflow-auto px-10">
-        <div v-bind="wrapperProps" class="flex flex-col px-4">
-          <div role="button" v-for="font in fontsList" @click="router.push(ROUTES.FONT_DETAIL(convertFamilyToParam(font.data.family)))" :key="font.data.family" :style="{ fontFamily: font.data.family }" class="h-40 hover:rounded-md border-b hover:border-b-0 border-gray-200 bg-white hover:bg-gray-200 p-4">
-            {{ font.data.family }}
+      <div class="h-[calc(100dvh-136px)] overflow-auto px-10 pb-4">
+        <div class="flex flex-col px-4">
+          <div
+            v-for="font in fonts"
+            :key="font.family"
+            :style="{ fontFamily: font.family, height: `${filterStore.fontSize * 1.5 + 106}px` }"
+            class="hover:rounded-md border-b border-gray-200 bg-white hover:bg-gray-200 p-4 shrink-0"
+            role="button"
+            @click="router.push(ROUTES.FONT_DETAIL(convertFamilyToParam(font.family)))"
+          >
+            {{ font.family }}
             <div class="w-full">
-              <p class="truncate w-full !text-4xl !leading-normal">
-                {{ PREVIEW_SENTENCE }}
+              <p class="truncate w-full !leading-normal" :style="{fontSize: `${filterStore.fontSize}px`}">
+                {{ filterStore.preview || PREVIEW_SENTENCE }}
               </p>
             </div>
           </div>
@@ -35,15 +47,13 @@ import { PREVIEW_SENTENCE } from "~/constants/preview";
 import { ROUTES } from "~/constants/routes";
 import { convertFamilyToParam } from "~/utils/string";
 import { watch, onUnmounted } from 'vue'
-import type { FontItem } from "~/types/fonts.type";
-import { useSort } from "~/stores/sort";
-
-// const fonts = ref<FontItem[]>([]);
+import { useFilter } from "~/stores/filter";
 
 const { fonts, isLoading } = await useFetchFonts();
+
 const fontFaces = ref<{fontFace: string, url: string}[]>([]);
 const router = useRouter();
-const sortStore = useSort()
+const filterStore = useFilter();
 
 watch(() => fonts.value, () => {
   fonts.value.forEach((font) => {
@@ -62,17 +72,13 @@ onUnmounted(() => {
   fontFaces.value = [];
 });
 
-watch(sortStore, () => {
-  router.push({ query: { sort: sortStore.criteria } });
-})
-
-const {
-  list: fontsList,
-  containerProps,
-  wrapperProps,
-} = useVirtualList(fonts, {
-  itemHeight: 160,
-});
+// const {
+//   list: fontsList,
+//   containerProps,
+//   wrapperProps,
+// } = useVirtualList(fonts, {
+//   itemHeight: filterStore.fontSize * 1.5 + 106,
+// });
 </script>
 
 <style lang="scss" scoped></style>

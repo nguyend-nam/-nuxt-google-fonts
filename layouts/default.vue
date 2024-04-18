@@ -1,67 +1,29 @@
 <template>
   <div class="section-container">
-    <header class="flex justify-between items-center gap-4 h-[88px] px-4">
-      <h1 class="shrink-0 text-2xl">
-        <NuxtLink :href="ROUTES.HOME">
-          Google Fonts
-        </NuxtLink>
-      </h1>
-      <div
-        class="flex items-center bg-gray-100 pl-4 w-full rounded-full overflow-hidden"
-      >
-        <div class="flex items-center p-2.5 w-full">
-          <SearchOutlined class="text-xl h-5 flex" />
-          <Input :bordered="false" size="large" />
-        </div>
-        <div class="border-l h-[56px] flex items-center px-4">
-          <Select
-            v-model:value="sortStore.criteria"
-            @change="sortStore.setCriteria"
-            class="min-w-[160px] !rounded-full"
-            size="large"
-          >
-            <SelectOption v-for="(value, name) in SORT_CRITERIA" :key="name" :value="name">
-              {{ value }}
-            </SelectOption>
-          </Select>
-        </div>
-      </div>
-      <Button
-        shape="circle"
-        type="text"
-        size="large"
-        class="flex justify-center items-center"
-        :icon="h(ShoppingOutlined)"
-      />
-    </header>
-    <slot />
+    <ClientOnly>
+      <Header />
+      <Filter />
+      <slot />
+    </ClientOnly>
   </div>
 </template>
 
 <script setup>
-import { Button, Input, SelectOption, Select } from "ant-design-vue";
-import { ShoppingOutlined, SearchOutlined } from "@ant-design/icons-vue";
-import { h } from "vue";
+import { useFilter } from "~/stores/filter";
 import { useSort } from "~/stores/sort";
-import { SORT_CRITERIA } from "~/constants/sort";
-// import { watchDebounced } from '@vueuse/core'
-import { ROUTES } from "~/constants/routes";
+import { useSubset } from "~/stores/subset";
 
 const sortStore = useSort()
-const inputField = ref('')
+const subsetStore = useSubset()
+const filterStore = useFilter()
+
 const route = useRoute();
-const debouncedInputField = ref('')
 
-watch(inputField, () => {
-  if(inputField.value) {
-    debouncedInputField.value = inputField.value;
-  }
-});
-
-watch(() => route.query, () => {
-  if(route.query?.sort) {
-    sortStore.setCriteria(route.query.sort);
-  }
+watch(route.query, () => {
+  sortStore.setCriteria(route.query?.sort || 'trending');
+  subsetStore.setSubset(route.query?.subset || 'all-languages');
+  filterStore.setPreview(route.query?.preview || '');
+  filterStore.setFontSize(Number(route.query?.size) || 40);
 }, { immediate: true })
 
 </script>

@@ -1,5 +1,1 @@
-type SortCriteria =
-  | 'alpha'
-  | 'date'
-  | 'popularity'
-  | 'trending'
+export type SortCriteria = 'alpha' | 'date' | 'popularity' | 'trending';
