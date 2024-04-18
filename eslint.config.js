@@ -1,31 +1,31 @@
-import withNuxt from "./.nuxt/eslint.config.mjs";
+import withNuxt from './.nuxt/eslint.config.mjs';
 
 export default withNuxt(
   {
     ignores: [
-      ".nuxt/*",
-      "*.json",
-      "*.md",
-      "*.css",
-      "node_modules",
-      "dist",
-      "public/*",
-      "tests/*",
-      "scripts/*",
-      "*.config.js",
-      ".DS_Store",
-      "coverage",
-      ".nuxt",
-      "build",
-      "!.commitlintrc.cjs",
-      "jest.config.js",
+      '.nuxt/*',
+      '*.json',
+      '*.md',
+      '*.css',
+      'node_modules',
+      'dist',
+      'public/*',
+      'tests/*',
+      'scripts/*',
+      '*.config.js',
+      '.DS_Store',
+      'coverage',
+      '.nuxt',
+      'build',
+      '!.commitlintrc.cjs',
+      'jest.config.js',
     ],
   },
   {
-    files: ["**/*.vue"],
+    files: ['**/*.vue'],
     rules: {
       // "vue/html-self-closing": "off"
-      "vue/multi-word-component-names": "off"
+      'vue/multi-word-component-names': 'off',
     },
   },
 );

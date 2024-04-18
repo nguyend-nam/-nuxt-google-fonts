@@ -1,4 +1,4 @@
-import type { FontItem } from "~/types/fonts.type";
+import type { FontItem } from '~/types/fonts.type';
 
 export const getArrChunks = function (arr: FontItem[], n: number) {
   const ret = [];

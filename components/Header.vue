@@ -1,13 +1,9 @@
 <template>
   <header class="flex justify-between items-center gap-4 h-[88px] px-4">
     <h1 class="shrink-0 text-2xl">
-      <NuxtLink :href="ROUTES.HOME">
-        Google Fonts
-      </NuxtLink>
+      <NuxtLink :href="ROUTES.HOME"> Google Fonts </NuxtLink>
     </h1>
-    <div
-      class="flex items-center bg-gray-100 pl-4 w-full rounded-full overflow-hidden"
-    >
+    <div class="flex items-center bg-gray-100 pl-4 w-full rounded-full overflow-hidden">
       <div class="flex items-center p-2.5 w-full">
         <SearchOutlined class="text-xl h-5 flex" />
         <Input :bordered="false" size="large" />
@@ -36,17 +32,17 @@
 </template>
 
 <script setup>
-import { Button, Input, SelectOption, Select } from "ant-design-vue";
-import { ShoppingOutlined, SearchOutlined } from "@ant-design/icons-vue";
-import { h } from "vue";
-import { useSort } from "~/stores/sort";
-import { SORT_CRITERIA } from "~/constants/sort";
-import { ROUTES } from "~/constants/routes";
+import { Button, Input, SelectOption, Select } from 'ant-design-vue';
+import { ShoppingOutlined, SearchOutlined } from '@ant-design/icons-vue';
+import { h } from 'vue';
+import { useSort } from '~/stores/sort';
+import { SORT_CRITERIA } from '~/constants/sort';
+import { ROUTES } from '~/constants/routes';
 
-const sortStore = useSort()
+const sortStore = useSort();
 
-const inputField = ref('')
-const debouncedInputField = ref('')
+const inputField = ref('');
+const debouncedInputField = ref('');
 
 watch(inputField, () => {
   if (inputField.value) {

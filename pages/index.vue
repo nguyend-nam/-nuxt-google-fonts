@@ -1,8 +1,13 @@
 <template>
   <div>
-
     <Head>
-      <Style v-for="font in fontFaces.filter(Boolean).map(f => f.fontFace)" :id="font" :key="font" type="text/css" :children="font" />
+      <Style
+        v-for="font in fontFaces.filter(Boolean).map((f) => f.fontFace)"
+        :id="font"
+        :key="font"
+        type="text/css"
+        :children="font"
+      />
       <!-- <Link v-for="menu in fontFaces.filter(Boolean).map(f => f.url)" rel="preload" as="font" :id="menu" :key="menu" :href="menu" /> -->
     </Head>
 
@@ -29,7 +34,10 @@
           >
             {{ font.family }}
             <div class="w-full">
-              <p class="truncate w-full !leading-normal" :style="{fontSize: `${filterStore.fontSize}px`}">
+              <p
+                class="truncate w-full !leading-normal"
+                :style="{ fontSize: `${filterStore.fontSize}px` }"
+              >
                 {{ filterStore.preview || PREVIEW_SENTENCE }}
               </p>
             </div>
@@ -41,32 +49,39 @@
 </template>
 
 <script setup lang="ts">
-import { useFetchFonts } from "~/composables/useFetchFonts";
-import { useVirtualList } from "@vueuse/core";
-import { PREVIEW_SENTENCE } from "~/constants/preview";
-import { ROUTES } from "~/constants/routes";
-import { convertFamilyToParam } from "~/utils/string";
-import { watch, onUnmounted } from 'vue'
-import { useFilter } from "~/stores/filter";
+import { useFetchFonts } from '~/composables/useFetchFonts';
+// import { useVirtualList } from "@vueuse/core";
+import { PREVIEW_SENTENCE } from '~/constants/preview';
+import { ROUTES } from '~/constants/routes';
+import { convertFamilyToParam } from '~/utils/string';
+import { watch, onUnmounted } from 'vue';
+import { useFilter } from '~/stores/filter';
 
 const { fonts, isLoading } = await useFetchFonts();
 
-const fontFaces = ref<{fontFace: string, url: string}[]>([]);
+const fontFaces = ref<{ fontFace: string; url: string }[]>([]);
 const router = useRouter();
 const filterStore = useFilter();
 
-watch(() => fonts.value, () => {
-  fonts.value.forEach((font) => {
-    fontFaces.value.push({fontFace:`
+watch(
+  () => fonts.value,
+  () => {
+    fonts.value.forEach((font) => {
+      fontFaces.value.push({
+        fontFace: `
 @font-face {
   font-family: '${font.family}';
   font-style: normal;
   font-weight: 400;
   src: url('${font.files.regular}') format('woff2');
 }
-    `, url: font.menu});
-  });
-}, { immediate: true });
+    `,
+        url: font.menu,
+      });
+    });
+  },
+  { immediate: true },
+);
 
 onUnmounted(() => {
   fontFaces.value = [];
