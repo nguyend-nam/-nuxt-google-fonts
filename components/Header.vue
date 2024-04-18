@@ -6,7 +6,7 @@
     <div class="flex items-center bg-gray-100 pl-4 w-full rounded-full overflow-hidden">
       <div class="flex items-center p-2.5 w-full">
         <SearchOutlined class="text-xl h-5 flex" />
-        <Input :bordered="false" size="large" />
+        <Input v-model:value="filterStore.searchTerm" :bordered="false" size="large" />
       </div>
       <div class="border-l h-[56px] flex items-center px-4">
         <Select
@@ -38,8 +38,10 @@ import { h } from 'vue';
 import { useSort } from '~/stores/sort';
 import { SORT_CRITERIA } from '~/constants/sort';
 import { ROUTES } from '~/constants/routes';
+import { useFilter } from '~/stores/filter';
 
 const sortStore = useSort();
+const filterStore = useFilter();
 
 const inputField = ref('');
 const debouncedInputField = ref('');

@@ -25,7 +25,9 @@
       <div class="h-[calc(100dvh-136px)] overflow-auto px-10 pb-4">
         <div class="flex flex-col px-4">
           <div
-            v-for="font in fonts"
+            v-for="font in fonts.filter((f) =>
+              f.family.toLowerCase().includes(debouncedSearchTerm.toLowerCase()),
+            )"
             :key="font.family"
             :style="{ fontFamily: font.family, height: `${filterStore.fontSize * 1.5 + 106}px` }"
             class="hover:rounded-md border-b border-gray-200 bg-white hover:bg-gray-200 p-4 shrink-0"
@@ -56,12 +58,23 @@ import { ROUTES } from '~/constants/routes';
 import { convertFamilyToParam } from '~/utils/string';
 import { watch, onUnmounted } from 'vue';
 import { useFilter } from '~/stores/filter';
+import { watchDebounced } from '@vueuse/core';
 
 const { fonts, isLoading } = await useFetchFonts();
 
 const fontFaces = ref<{ fontFace: string; url: string }[]>([]);
 const router = useRouter();
 const filterStore = useFilter();
+
+const debouncedSearchTerm = ref('');
+
+watchDebounced(
+  () => filterStore.searchTerm,
+  (value) => {
+    debouncedSearchTerm.value = value;
+  },
+  { debounce: 300 },
+);
 
 watch(
   () => fonts.value,
