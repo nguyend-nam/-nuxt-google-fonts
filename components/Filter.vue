@@ -38,18 +38,11 @@ import { useFilter } from "~/stores/filter";
 import { useSubset } from "~/stores/subset";
 import { SUBSETS } from "~/constants/subset";
 import { FONT_SIZES } from "~/constants/font-size";
-import { watchDebounced } from '@vueuse/core'
 
 const filterStore = useFilter()
 const subsetStore = useSubset()
 
 const isExpanded = ref(false)
-
-const previewText = ref('')
-
-watchDebounced(previewText, () => {
-  filterStore.setPreview(previewText.value)
-}, { debounce: 300 })
 </script>
 
 <style scoped>

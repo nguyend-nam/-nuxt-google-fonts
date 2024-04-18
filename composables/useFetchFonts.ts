@@ -45,7 +45,7 @@ export const useFetchFonts = async () => {
     isLoading.value = false;
   }
 
-  watch([params], async () => {
+  watch(params, async () => {
     try {
       isLoading.value = true;
       const res: GetFontsResponse = await $fetch(
@@ -62,18 +62,18 @@ export const useFetchFonts = async () => {
   });
 
   watchDebounced(
-    [params, filterStore],
+    () => [sortStore.criteria, subsetStore.subset, filterStore.fontSize],
     async () => {
       router.push({
         query: {
           ...(sortStore.criteria !== 'trending' ? { sort: sortStore.criteria } : null),
           ...(subsetStore.subset !== 'all-languages' ? { subset: subsetStore.subset } : null),
-          ...(filterStore.preview ? { preview: filterStore.preview } : null),
+          // ...(filterStore.preview ? { preview: filterStore.preview } : null),
           ...(filterStore.fontSize !== 40 ? { size: filterStore.fontSize } : null),
         },
       });
     },
-    { debounce: 500 },
+    { debounce: 300 },
   );
 
   return { fonts, isLoading };

@@ -18,7 +18,6 @@ const subsetStore = useSubset()
 const filterStore = useFilter()
 
 const route = useRoute();
-const router = useRouter();
 
 watch(route.query, () => {
   sortStore.setCriteria(route.query?.sort || 'trending');
