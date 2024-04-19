@@ -24,26 +24,13 @@
     <div v-else>
       <div class="h-[calc(100dvh-136px)] overflow-auto px-10 pb-4">
         <div class="flex flex-col px-4">
-          <div
+          <FontCard
             v-for="font in fonts.filter((f) =>
               f.family.toLowerCase().includes(debouncedSearchTerm.toLowerCase()),
             )"
             :key="font.family"
-            :style="{ fontFamily: font.family, height: `${filterStore.fontSize * 1.5 + 106}px` }"
-            class="hover:rounded-md border-b border-gray-200 bg-white hover:bg-gray-200 p-4 shrink-0"
-            role="button"
-            @click="router.push(ROUTES.FONT_DETAIL(convertFamilyToParam(font.family)))"
-          >
-            {{ font.family }}
-            <div class="w-full">
-              <p
-                class="truncate w-full !leading-normal"
-                :style="{ fontSize: `${filterStore.fontSize}px` }"
-              >
-                {{ filterStore.preview || PREVIEW_SENTENCE }}
-              </p>
-            </div>
-          </div>
+            :font="font"
+          />
         </div>
       </div>
     </div>
@@ -52,10 +39,6 @@
 
 <script setup lang="ts">
 import { useFetchFonts } from '~/composables/useFetchFonts';
-// import { useVirtualList } from "@vueuse/core";
-import { PREVIEW_SENTENCE } from '~/constants/preview';
-import { ROUTES } from '~/constants/routes';
-import { convertFamilyToParam } from '~/utils/string';
 import { watch, onUnmounted } from 'vue';
 import { useFilter } from '~/stores/filter';
 import { watchDebounced } from '@vueuse/core';
@@ -63,7 +46,6 @@ import { watchDebounced } from '@vueuse/core';
 const { fonts, isLoading } = await useFetchFonts();
 
 const fontFaces = ref<{ fontFace: string; url: string }[]>([]);
-const router = useRouter();
 const filterStore = useFilter();
 
 const debouncedSearchTerm = ref('');

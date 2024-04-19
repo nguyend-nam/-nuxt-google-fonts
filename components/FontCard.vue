@@ -1,0 +1,56 @@
+<template>
+  <div ref="target">
+    <div
+      :key="font.family"
+      v-element-visibility="[onElementVisibility, { scrollTarget: target }]"
+      :style="{ height: `${filterStore.fontSize * 1.5 + 106}px` }"
+      class="hover:rounded-md border-b border-gray-200 bg-white hover:bg-gray-200 p-4 shrink-0 overflow-hidden"
+      role="button"
+      @click="router.push(ROUTES.FONT_DETAIL(convertFamilyToParam(font.family)))"
+    >
+      <div
+        class="transition-all duration-200 opacity-0 translate-y-6"
+        :class="{ '!opacity-100 !translate-y-0': isVisible }"
+      >
+        <div class="flex items-center gap-4">
+          <b class="font-semibold">{{ font.family }}</b>
+          <div class="w-[1px] h-4 bg-black" />
+          <p>{{ font.variants.length }} {{ font.variants.length > 1 ? 'variants' : 'variant' }}</p>
+        </div>
+        <div class="w-full">
+          <p
+            class="truncate w-full !leading-normal"
+            :style="{ fontSize: `${filterStore.fontSize}px`, fontFamily: font.family }"
+          >
+            {{ filterStore.preview || PREVIEW_SENTENCE }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { defineProps } from 'vue';
+import type { FontItem } from '~/types/fonts.type';
+import { ROUTES } from '~/constants/routes';
+import { PREVIEW_SENTENCE } from '~/constants/preview';
+import { useFilter } from '~/stores/filter';
+import { vElementVisibility } from '@vueuse/components';
+
+const router = useRouter();
+const filterStore = useFilter();
+const props = defineProps<{ font: FontItem }>();
+const { font } = props;
+
+const target = ref(null);
+
+const isVisible = ref(false);
+function onElementVisibility(state: boolean) {
+  if (state && !isVisible.value) {
+    isVisible.value = true;
+  }
+}
+</script>
+
+<style scoped></style>

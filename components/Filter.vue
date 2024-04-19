@@ -1,7 +1,7 @@
 <template>
   <div class="px-4 pb-4">
     <Button type="primary" @click="() => (isExpanded = !isExpanded)">Filter</Button>
-    <Drawer v-model:open="isExpanded">
+    <Drawer v-model:open="isExpanded" placement="left">
       <TypographyTitle :level="3">Preview</TypographyTitle>
       <Textarea v-model:value="filterStore.preview" />
       <div class="flex gap-2 mt-2">

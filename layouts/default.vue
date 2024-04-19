@@ -20,7 +20,7 @@ const filterStore = useFilter();
 const route = useRoute();
 
 watch(
-  route.query,
+  () => route.query,
   () => {
     sortStore.setCriteria(route.query?.sort || 'trending');
     subsetStore.setSubset(route.query?.subset || 'all-languages');
