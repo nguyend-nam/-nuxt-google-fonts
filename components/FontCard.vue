@@ -9,8 +9,13 @@
       @click="router.push(ROUTES.FONT_DETAIL(convertFamilyToParam(font.family)))"
     >
       <div
-        class="transition-all duration-200 opacity-0 translate-y-6"
-        :class="{ '!opacity-100 !translate-y-0': isVisible }"
+        class="transition-all duration-200"
+        :class="{
+          '!opacity-100': isVisible,
+          'opacity-100 !translate-y-0': isVisited,
+          '!opacity-0': !isVisible,
+          '!opacity-0 !translate-y-6': !isVisited,
+        }"
       >
         <div class="flex items-center gap-4">
           <b class="font-semibold">{{ font.family }}</b>
@@ -45,11 +50,14 @@ const { font } = props;
 
 const target = ref(null);
 
+const isVisited = ref(false);
 const isVisible = ref(false);
 function onElementVisibility(state: boolean) {
-  if (state && !isVisible.value) {
-    isVisible.value = true;
+  if (state && !isVisited.value) {
+    isVisited.value = true;
   }
+
+  isVisible.value = state;
 }
 </script>
 
