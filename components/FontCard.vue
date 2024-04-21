@@ -36,7 +36,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
 import type { FontItem } from '~/types/fonts.type';
 import { ROUTES } from '~/constants/routes';
 import { PREVIEW_SENTENCE } from '~/constants/preview';

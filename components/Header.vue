@@ -1,5 +1,5 @@
 <template>
-  <header class="flex justify-between items-center gap-4 h-[88px] px-4">
+  <header class="flex justify-between items-center gap-4 h-[88px] px-14">
     <h1 class="shrink-0 text-2xl">
       <NuxtLink :href="ROUTES.HOME"> Google Fonts </NuxtLink>
     </h1>
@@ -34,7 +34,6 @@
 <script setup>
 import { Button, Input, SelectOption, Select } from 'ant-design-vue';
 import { ShoppingOutlined, SearchOutlined } from '@ant-design/icons-vue';
-import { h } from 'vue';
 import { useSort } from '~/stores/sort';
 import { SORT_CRITERIA } from '~/constants/sort';
 import { ROUTES } from '~/constants/routes';
@@ -43,14 +42,16 @@ import { useFilter } from '~/stores/filter';
 const sortStore = useSort();
 const filterStore = useFilter();
 
-const inputField = ref('');
-const debouncedInputField = ref('');
+const route = useRoute();
 
-watch(inputField, () => {
-  if (inputField.value) {
-    debouncedInputField.value = inputField.value;
-  }
-});
+watch(
+  () => route.path,
+  () => {
+    console.log(route)
+    filterStore.searchTerm = ''
+  },
+  { immediate: true},
+);
 </script>
 
 <style lang="scss" scoped></style>

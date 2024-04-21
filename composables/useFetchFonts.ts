@@ -3,7 +3,6 @@ import { GOOGLE_FONTS_BASE_URL } from '~/constants/endpoints';
 import { useSort } from '~/stores/sort';
 import { useSubset } from '~/stores/subset';
 import type { FontItem, GetFontsResponse } from '~/types/fonts.type';
-import { watch } from 'vue';
 import qs from 'qs';
 import { useFilter } from '~/stores/filter';
 import { watchDebounced } from '@vueuse/core';

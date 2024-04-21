@@ -39,7 +39,6 @@
 
 <script setup lang="ts">
 import { useFetchFonts } from '~/composables/useFetchFonts';
-import { watch, onUnmounted } from 'vue';
 import { useFilter } from '~/stores/filter';
 import { watchDebounced } from '@vueuse/core';
 

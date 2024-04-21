@@ -1,5 +1,5 @@
 <template>
-  <div class="px-4 pb-4">
+  <div class="px-14 pb-4">
     <Button type="primary" @click="() => (isExpanded = !isExpanded)">Filter</Button>
     <Drawer v-model:open="isExpanded" placement="left">
       <TypographyTitle :level="3">Preview</TypographyTitle>
