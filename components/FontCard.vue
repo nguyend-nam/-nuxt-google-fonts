@@ -6,7 +6,16 @@
       :style="{ height: `${filterStore.fontSize * 1.5 + 106}px` }"
       class="hover:rounded-md border-b border-gray-200 bg-white hover:bg-gray-200 p-4 shrink-0 overflow-hidden"
       role="button"
-      @click="router.push(ROUTES.FONT_DETAIL(convertFamilyToParam(font.family)))"
+      @click="
+        router.push({
+          path: ROUTES.FONT_DETAIL(convertFamilyToParam(font.family)),
+          query: {
+            ...(sortStore.criteria !== 'trending' ? { sort: sortStore.criteria } : null),
+            ...(subsetStore.subset !== 'all-languages' ? { subset: subsetStore.subset } : null),
+            ...(filterStore.fontSize !== 40 ? { size: filterStore.fontSize } : null),
+          },
+        })
+      "
     >
       <div
         class="transition-all duration-200"
@@ -39,10 +48,14 @@
 import type { FontItem } from '~/types/fonts.type';
 import { ROUTES } from '~/constants/routes';
 import { PREVIEW_SENTENCE } from '~/constants/preview';
+import { useSort } from '~/stores/sort';
+import { useSubset } from '~/stores/subset';
 import { useFilter } from '~/stores/filter';
 import { vElementVisibility } from '@vueuse/components';
 
 const router = useRouter();
+const sortStore = useSort();
+const subsetStore = useSubset();
 const filterStore = useFilter();
 const props = defineProps<{ font: FontItem }>();
 const { font } = props;

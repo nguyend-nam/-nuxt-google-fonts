@@ -5,12 +5,13 @@
       <TypographyTitle :level="3">Preview</TypographyTitle>
       <Textarea v-model:value="filterStore.preview" />
       <div class="flex gap-2 mt-2">
-        <Select v-model:value="filterStore.fontSize" class="min-w-[90px] w-max">
+        <Select v-model:value="filterStore.fontSize" class="min-w-[80px] w-max">
           <SelectOption v-for="value in FONT_SIZES" :key="value" :value="value">
-            {{ value }} px
+            {{ value }}
           </SelectOption>
+          <template #suffixIcon>px</template>
         </Select>
-        <div class="w-full">
+        <div class="w-full h-8">
           <Slider v-model:value="filterStore.fontSize" :min="8" :max="300" :tooltip-open="false" />
         </div>
       </div>

@@ -1,7 +1,15 @@
 <template>
   <header class="flex justify-between items-center gap-4 h-[88px] px-14">
     <h1 class="shrink-0 text-2xl">
-      <NuxtLink :href="ROUTES.HOME"> Google Fonts </NuxtLink>
+      <NuxtLink
+        :href="`${ROUTES.HOME}?${qs.stringify({
+          ...(sortStore.criteria !== 'trending' ? { sort: sortStore.criteria } : null),
+          ...(subsetStore.subset !== 'all-languages' ? { subset: subsetStore.subset } : null),
+          ...(filterStore.fontSize !== 40 ? { size: filterStore.fontSize } : null),
+        })}`"
+      >
+        Google Fonts
+      </NuxtLink>
     </h1>
     <div class="flex items-center bg-gray-100 pl-4 w-full rounded-full overflow-hidden">
       <div class="flex items-center p-2.5 w-full">
@@ -38,8 +46,11 @@ import { useSort } from '~/stores/sort';
 import { SORT_CRITERIA } from '~/constants/sort';
 import { ROUTES } from '~/constants/routes';
 import { useFilter } from '~/stores/filter';
+import { useSubset } from '~/stores/subset';
+import qs from 'qs';
 
 const sortStore = useSort();
+const subsetStore = useSubset();
 const filterStore = useFilter();
 
 const route = useRoute();
@@ -47,10 +58,10 @@ const route = useRoute();
 watch(
   () => route.path,
   () => {
-    console.log(route)
-    filterStore.searchTerm = ''
+    console.log(route);
+    filterStore.searchTerm = '';
   },
-  { immediate: true},
+  { immediate: true },
 );
 </script>
 

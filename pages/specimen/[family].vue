@@ -14,37 +14,48 @@
         <div
           v-for="(_, index) in new Array(15).fill(true)"
           :key="index"
-          class="h-[159px] w-full rounded-md bg-gray-100 p-4 animate-pulse"
-          :style="{ height: `${filterStore.fontSize * 1.5 + 106}px` }"
+          class="w-full rounded-md bg-gray-100 p-4 animate-pulse h-[157px]"
         />
       </div>
     </div>
     <div v-else-if="!currentFont">
       <div class="px-14 pb-4">
-        <h2>
-          Font not found
-        </h2>
+        <h2> Font not found </h2>
       </div>
     </div>
     <div v-else>
       <div class="px-14 pb-4">
-        <h2 class="text-6xl">
+        <h2 class="text-6xl mt-8">
           {{ currentFont.family }}
         </h2>
+        <FontDetailStyles
+          :preview="fontDetailPreview"
+          :font-size="fontSize"
+          @input="onPreviewInput"
+          @set-font-size="setFontSize"
+        />
         <div class="mt-12 border-b border-gray-200">
-          <div v-for="(variant, index) in variantStyles" :key="variant.fontFamily + index" class="p-4 border-t w-full border-gray-200">
+          <div
+            v-for="(variant, index) in variantStyles"
+            :key="variant.fontFamily + index"
+            class="p-4 border-t w-full border-gray-200"
+          >
             <p class="text-sm text-gray-700 mb-2">
-              {{ [
-                getFontWeight(variant.fontWeight),
-                variant.fontWeight,
-                variant.fontStyle === 'italic'
-                  ? variant.fontStyle[0].toUpperCase() + variant.fontStyle.slice(1)
-                  : '',
-              ].join(' ') }}
+              {{
+                [
+                  getFontWeight(variant.fontWeight),
+                  variant.fontWeight,
+                  variant.fontStyle === 'italic'
+                    ? variant.fontStyle[0].toUpperCase() + variant.fontStyle.slice(1)
+                    : '',
+                ].join(' ')
+              }}
             </p>
-            <div class="truncate w-full !leading-normal" :style="{ fontSize: `${filterStore.fontSize}px`, ...variant }">
-              {{ FONT_DETAIL_PREVIEW_SENTENCE }}
-            </div>
+            <FontVariantContentEditable
+              :preview="fontDetailPreview"
+              :style="{ fontSize: `${fontSize}px`, ...variant }"
+              @input="onPreviewInput"
+            />
           </div>
         </div>
       </div>
@@ -55,13 +66,14 @@
 <script setup lang="ts">
 import type { FontItem, FontWeight } from '~/types/fonts.type';
 import { convertParamToFamily } from '~/utils/string';
-import { useFilter } from '~/stores/filter';
 import { FONT_DETAIL_PREVIEW_SENTENCE } from '~/constants/preview';
 
+definePageMeta({
+  layout: 'font-detail',
+});
 const { fonts, isLoading } = await useFetchFonts();
 const route = useRoute();
 const currentFont = ref<FontItem | null>(null);
-const filterStore = useFilter();
 
 watchEffect(() => {
   const currentFontData = fonts.value.find(
@@ -80,8 +92,8 @@ watch(
   () => {
     if (!!currentFont.value && currentFont.value?.variants.length > 0) {
       currentFont.value?.variants.forEach((variant) => {
-        const weight = variant === 'regular' ? '400' : variant
-        const surl = currentFont.value?.files[variant]
+        const weight = variant === 'regular' ? '400' : variant;
+        const surl = currentFont.value?.files[variant];
 
         if (weight) {
           fontFaces.value.push({
@@ -104,25 +116,23 @@ watch(
   { immediate: true },
 );
 
-let variantStyles: {
-  fontFamily: string,
-  fontWeight: FontWeight,
-  fontStyle: string,
-  fontStretch: string,
-  lineHeight: string,
-  fontCategory: string,
-}[] = []
+const variantStyles: {
+  fontFamily: string;
+  fontWeight: FontWeight;
+  fontStyle: string;
+  fontStretch: string;
+  lineHeight: string;
+  fontCategory: string;
+}[] = [];
 
-if(currentFont.value) {
-  const { subsets, family } = currentFont.value
+if (currentFont.value) {
+  const { subsets, family } = currentFont.value;
   for (let i = 0; i < currentFont.value.variants.length; i++) {
-    const fontDetails = currentFont.value
+    const fontDetails = currentFont.value;
 
     if (fontDetails.variants[i].includes('italic')) {
       const props = {
-        fontFamily: `"${family} script=${
-          subsets.includes('latin') ? 'latin' : subsets[0]
-        } rev=1"`,
+        fontFamily: `"${family} script=${subsets.includes('latin') ? 'latin' : subsets[0]} rev=1"`,
         fontWeight: `${
           fontDetails.variants[i].slice(0, 3) === 'ita'
             ? '400'
@@ -132,27 +142,37 @@ if(currentFont.value) {
         fontStretch: `normal`,
         lineHeight: `initial`,
         fontCategory: fontDetails.category,
-      }
-      variantStyles.push(props)
+      };
+      variantStyles.push(props);
     } else {
       const props = {
-        fontFamily: `"${family} script=${
-          subsets.includes('latin') ? 'latin' : subsets[0]
-        } rev=1"`,
+        fontFamily: `"${family} script=${subsets.includes('latin') ? 'latin' : subsets[0]} rev=1"`,
         fontWeight: `${
-          fontDetails.variants[i] === 'regular'
-            ? '400'
-            : fontDetails.variants[i]
+          fontDetails.variants[i] === 'regular' ? '400' : fontDetails.variants[i]
         }` as FontWeight,
         fontStyle: `regular`,
         fontStretch: `normal`,
         lineHeight: `initial`,
         fontCategory: fontDetails.category,
-      }
-      variantStyles.push(props)
+      };
+      variantStyles.push(props);
     }
   }
 }
+
+const fontDetailPreview = ref<string>(FONT_DETAIL_PREVIEW_SENTENCE);
+
+const onPreviewInput = (value: string) => {
+  fontDetailPreview.value = value;
+};
+
+const fontSize = ref<number>(48);
+
+const setFontSize = (value?: number) => {
+  if (value) {
+    fontSize.value = value;
+  }
+};
 
 onUnmounted(() => {
   fontFaces.value = [];
