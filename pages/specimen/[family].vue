@@ -31,6 +31,7 @@
         <h2 class="text-6xl">
           {{ currentFont.family }}
         </h2>
+        <FontDetailStyles :preview="fontDetailPreview" :font-size="fontSize" @input="onPreviewInput" @set-font-size="setFontSize" />
         <div class="mt-12 border-b border-gray-200">
           <div v-for="(variant, index) in variantStyles" :key="variant.fontFamily + index" class="p-4 border-t w-full border-gray-200">
             <p class="text-sm text-gray-700 mb-2">
@@ -42,9 +43,7 @@
                   : '',
               ].join(' ') }}
             </p>
-            <div class="truncate w-full !leading-normal" :style="{ fontSize: `${filterStore.fontSize}px`, ...variant }">
-              {{ FONT_DETAIL_PREVIEW_SENTENCE }}
-            </div>
+            <FontVariantContentEditable :preview="fontDetailPreview" :style="{ fontSize: `${filterStore.fontSize}px`, ...variant }" @input="onPreviewInput" />
           </div>
         </div>
       </div>
@@ -153,6 +152,20 @@ if(currentFont.value) {
     }
   }
 }
+
+const fontDetailPreview = ref<string>(FONT_DETAIL_PREVIEW_SENTENCE);
+
+const onPreviewInput = (value: string) => {
+  fontDetailPreview.value = value
+};
+
+const fontSize = ref<number>(64);
+
+const setFontSize = (value?: number) => {
+  if (value) {
+    fontSize.value = value;
+  }
+};
 
 onUnmounted(() => {
   fontFaces.value = [];
