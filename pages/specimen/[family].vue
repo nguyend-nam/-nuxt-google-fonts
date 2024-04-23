@@ -25,9 +25,18 @@
     </div>
     <div v-else>
       <div class="px-14 pb-4">
-        <h2 class="text-6xl mt-8">
-          {{ currentFont.family }}
-        </h2>
+        <div class="mt-8 flex items-center gap-4 justify-between">
+          <h2 class="text-6xl">
+            {{ currentFont.family }}
+          </h2>
+          <Button
+            v-if="selectedStore.isStored(currentFont.family)"
+            type="primary"
+            @click="() => selectedStore.removeSelectedStyle(currentFont?.family || '')"
+            >Remove font family</Button
+          >
+          <Button v-else type="primary" @click="addCurrentFont">Add font family</Button>
+        </div>
         <FontDetailStyles
           :preview="fontDetailPreview"
           :font-size="fontSize"
@@ -67,6 +76,8 @@
 import type { FontItem, FontWeight } from '~/types/fonts.type';
 import { convertParamToFamily } from '~/utils/string';
 import { FONT_DETAIL_PREVIEW_SENTENCE } from '~/constants/preview';
+import { Button } from 'ant-design-vue';
+import { useSelected } from '~/stores/selected';
 
 definePageMeta({
   layout: 'font-detail',
@@ -171,6 +182,17 @@ const fontSize = ref<number>(48);
 const setFontSize = (value?: number) => {
   if (value) {
     fontSize.value = value;
+  }
+};
+
+const selectedStore = useSelected();
+
+const addCurrentFont = () => {
+  if (currentFont.value) {
+    selectedStore.addSelectedStyle(
+      currentFont.value.family,
+      convertFontStyles(currentFont.value.variants || []),
+    );
   }
 };
 
