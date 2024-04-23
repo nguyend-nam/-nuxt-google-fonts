@@ -1,7 +1,7 @@
 <template>
   <div class="section-container">
     <ClientOnly>
-      <Header />
+      <Header :disabled="true" />
       <slot />
     </ClientOnly>
   </div>

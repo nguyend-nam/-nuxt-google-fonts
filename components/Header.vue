@@ -21,6 +21,7 @@
           v-model:value="sortStore.criteria"
           class="min-w-[160px] !rounded-full"
           size="large"
+          :disabled="props.disabled"
           @change="sortStore.setCriteria"
         >
           <SelectOption v-for="(value, name) in SORT_CRITERIA" :key="name" :value="name">
@@ -29,18 +30,30 @@
         </Select>
       </div>
     </div>
-    <Button
-      shape="circle"
-      type="text"
-      size="large"
-      class="flex justify-center items-center"
-      :icon="h(ShoppingOutlined)"
-    />
+    <Badge :count="Object.keys(selectedStore.selected).length">
+      <Button
+        shape="circle"
+        type="text"
+        size="large"
+        class="flex justify-center items-center"
+        :icon="h(ShoppingOutlined)"
+        @click="
+          router.push({
+            path: ROUTES.EMBED,
+            query: {
+              ...(sortStore.criteria !== 'trending' ? { sort: sortStore.criteria } : null),
+              ...(subsetStore.subset !== 'all-languages' ? { subset: subsetStore.subset } : null),
+              ...(filterStore.fontSize !== 40 ? { size: filterStore.fontSize } : null),
+            },
+          })
+        "
+      />
+    </Badge>
   </header>
 </template>
 
-<script setup>
-import { Button, Input, SelectOption, Select } from 'ant-design-vue';
+<script setup lang="ts">
+import { Badge, Button, Input, SelectOption, Select } from 'ant-design-vue';
 import { ShoppingOutlined, SearchOutlined } from '@ant-design/icons-vue';
 import { useSort } from '~/stores/sort';
 import { SORT_CRITERIA } from '~/constants/sort';
@@ -48,12 +61,19 @@ import { ROUTES } from '~/constants/routes';
 import { useFilter } from '~/stores/filter';
 import { useSubset } from '~/stores/subset';
 import qs from 'qs';
+import { useSelected } from '~/stores/selected';
+
+const props = defineProps<{
+  disabled?: boolean;
+}>();
 
 const sortStore = useSort();
 const subsetStore = useSubset();
 const filterStore = useFilter();
 
 const route = useRoute();
+const router = useRouter();
+const selectedStore = useSelected();
 
 watch(
   () => route.path,
