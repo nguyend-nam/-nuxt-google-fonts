@@ -1,5 +1,5 @@
 <template>
-  <header class="flex justify-between items-center gap-4 h-[88px] px-14">
+  <header class="flex justify-between items-center gap-4 h-[88px] px-14 sticky top-0 bg-white z-50">
     <h1 class="shrink-0 text-2xl">
       <NuxtLink
         :href="`${ROUTES.HOME}?${qs.stringify({
@@ -22,6 +22,7 @@
           class="min-w-[160px] !rounded-full"
           size="large"
           :disabled="props.disabled"
+          :bordered="false"
           @change="sortStore.setCriteria"
         >
           <SelectOption v-for="(value, name) in SORT_CRITERIA" :key="name" :value="name">
@@ -36,6 +37,7 @@
         type="text"
         size="large"
         class="flex justify-center items-center"
+        style="border: 1px solid #f0f0f0"
         :icon="h(ShoppingOutlined)"
         @click="
           router.push({
@@ -78,7 +80,6 @@ const selectedStore = useSelected();
 watch(
   () => route.path,
   () => {
-    console.log(route);
     filterStore.searchTerm = '';
   },
   { immediate: true },

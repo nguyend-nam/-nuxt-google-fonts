@@ -27,7 +27,7 @@ export const convertStylesToLink = (styles: SelectedStyle) => {
         })
         .join(';');
 
-      return `family=${family}:${variantsMap}@${variants}`;
+      return `family=${family.replace(/ /g, '+')}:${variantsMap}@${variants}`;
     })
     .join('&');
 
@@ -39,10 +39,10 @@ export const convertStylesToLink = (styles: SelectedStyle) => {
 export const convertStylesToCSS = (family: string, variants: SelectedVariant[]) => {
   const classes = variants
     .map((variant) => {
-      const className = `${family}-${fontWeights[variant.wght as FontWeight]}${variant.ital === '1' ? '-italic' : ''}`;
+      const className = `${family.replace(/ /g, '-')}-${fontWeights[variant.wght as FontWeight]}${variant.ital === '1' ? '-italic' : ''}`;
 
       const styling = `.${className.replace(/ /g, '').toLowerCase()} {
-  font-family: '${family}', sans-serif;
+  font-family: "${family}", sans-serif;
   font-weight: ${variant.wght};
   font-style: ${variant.ital === '1' ? 'italic' : 'normal'};
 }`;

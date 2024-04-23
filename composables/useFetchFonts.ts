@@ -63,7 +63,6 @@ export const useFetchFonts = async () => {
   watchDebounced(
     () => [sortStore.criteria, subsetStore.subset, filterStore.fontSize],
     () => {
-      console.log(sortStore.criteria, subsetStore.subset, filterStore.fontSize);
       router.push({
         query: {
           ...(sortStore.criteria !== 'trending' ? { sort: sortStore.criteria } : null),
