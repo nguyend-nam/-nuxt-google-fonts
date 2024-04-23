@@ -38,7 +38,6 @@
 </template>
 
 <script setup lang="ts">
-import { useFetchFonts } from '~/composables/useFetchFonts';
 import { useFilter } from '~/stores/filter';
 import { watchDebounced } from '@vueuse/core';
 

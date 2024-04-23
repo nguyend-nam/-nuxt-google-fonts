@@ -49,7 +49,7 @@ import { ROUTES } from '~/constants/routes';
 import qs from 'qs';
 import { Button } from 'ant-design-vue';
 
-const { fonts, isLoading } = await useFetchFonts();
+const { fonts, isLoading } = await useFetchAllFonts();
 
 const sortStore = useSort();
 const subsetStore = useSubset();

@@ -29,7 +29,7 @@ import { FONT_DETAIL_PREVIEW_SENTENCE } from '~/constants/preview';
 import { TypographyTitle, Button } from 'ant-design-vue';
 import { useSelected } from '~/stores/selected';
 
-const { fonts, isLoading } = await useFetchFonts();
+const { fonts, isLoading } = await useFetchAllFonts();
 
 const props = defineProps<{
   data: Record<string, SelectedVariant[]>;
