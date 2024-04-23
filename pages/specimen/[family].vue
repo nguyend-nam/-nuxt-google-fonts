@@ -82,7 +82,7 @@ import { useSelected } from '~/stores/selected';
 definePageMeta({
   layout: 'font-detail',
 });
-const { fonts, isLoading } = await useFetchFonts();
+const { fonts, isLoading } = await useFetchAllFonts();
 const route = useRoute();
 const currentFont = ref<FontItem | null>(null);
 
