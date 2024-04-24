@@ -21,6 +21,16 @@
         />
       </div>
     </div>
+    <div
+      v-else-if="
+        fonts.filter((f) => f.family.toLowerCase().includes(debouncedSearchTerm.toLowerCase()))
+          .length === 0
+      "
+      class="px-14 pb-4 mt-8 flex flex-col items-center"
+    >
+      <p class="text-[200px] text-gray-500">(˚Δ˚)b</p>
+      <p class="text-2xl">Can't find any fonts.</p>
+    </div>
     <div v-else>
       <div class="h-[calc(100dvh-136px)] overflow-auto px-10 pb-4">
         <div class="flex flex-col px-4">
@@ -40,8 +50,10 @@
 <script setup lang="ts">
 import { useFilter } from '~/stores/filter';
 import { watchDebounced } from '@vueuse/core';
+import { useSubset } from '~/stores/subset';
+import { useSort } from '~/stores/sort';
 
-const { fonts, isLoading } = await useFetchFonts();
+const { fonts, isLoading } = await useFetchFontsV2();
 
 const fontFaces = ref<{ fontFace: string; url: string }[]>([]);
 const filterStore = useFilter();
@@ -66,7 +78,7 @@ watch(
   font-family: '${font.family}';
   font-style: normal;
   font-weight: 400;
-  src: url('${font.files.regular}') format('woff2');
+  src: url('${font.files?.regular || font.files?.[300] || font.files?.[700] || font.files?.italic}') format('woff2');
 }
     `,
         url: font.menu,

@@ -82,7 +82,7 @@ import { useSelected } from '~/stores/selected';
 definePageMeta({
   layout: 'font-detail',
 });
-const { fonts, isLoading } = await useFetchAllFonts();
+const { fonts, isLoading } = await useFetchAllFontsV2();
 const route = useRoute();
 const currentFont = ref<FontItem | null>(null);
 
@@ -99,7 +99,7 @@ watchEffect(() => {
 const fontFaces = ref<{ fontFace: string }[]>([]);
 
 watch(
-  () => currentFont.value?.variants,
+  [currentFont.value?.variants, fonts],
   () => {
     if (!!currentFont.value && currentFont.value?.variants.length > 0) {
       currentFont.value?.variants.forEach((variant) => {

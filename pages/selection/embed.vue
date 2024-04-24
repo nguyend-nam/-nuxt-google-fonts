@@ -14,8 +14,8 @@
       class="px-14 pb-4 mt-8 flex flex-col items-center"
     >
       <p class="text-[200px] text-gray-500">(˚Δ˚)b</p>
-      <p class="text-3xl">You don't have any fonts yet.</p>
-      <p class="text-3xl">Choose a font to get started.</p>
+      <p class="text-2xl">You don't have any fonts yet.</p>
+      <p class="text-2xl">Choose a font to get started.</p>
       <NuxtLink
         :href="`${ROUTES.HOME}?${qs.stringify({
           ...(sortStore.criteria !== 'trending' ? { sort: sortStore.criteria } : null),
@@ -49,7 +49,7 @@ import { ROUTES } from '~/constants/routes';
 import qs from 'qs';
 import { Button } from 'ant-design-vue';
 
-const { fonts, isLoading } = await useFetchAllFonts();
+const { fonts, isLoading } = await useFetchAllFontsV2();
 
 const sortStore = useSort();
 const subsetStore = useSubset();
@@ -62,7 +62,7 @@ definePageMeta({
 const fontFaces = ref<{ fontFace: string }[]>([]);
 
 watch(
-  () => selectedStore.selected,
+  [selectedStore.selected, fonts],
   () => {
     if (Object.keys(selectedStore.selected).length > 0) {
       fonts.value
@@ -75,7 +75,7 @@ watch(
   font-style: normal;
   font-weight: 400;
   font-display: block;
-  src: url(${files.regular}) format('woff2');
+  src: url(${files?.regular || files?.[300] || files?.[700] || files?.italic}) format('woff2');
   }
 `,
           });
