@@ -41,7 +41,7 @@
 import { useFilter } from '~/stores/filter';
 import { watchDebounced } from '@vueuse/core';
 
-const { fonts, isLoading } = await useFetchFonts();
+const { fonts, isLoading } = await useFetchFontsV2();
 
 const fontFaces = ref<{ fontFace: string; url: string }[]>([]);
 const filterStore = useFilter();
@@ -66,7 +66,7 @@ watch(
   font-family: '${font.family}';
   font-style: normal;
   font-weight: 400;
-  src: url('${font.files.regular}') format('woff2');
+  src: url('${font.files?.regular || font.files?.[300] || font.files?.[700] || font.files?.italic}') format('woff2');
 }
     `,
         url: font.menu,

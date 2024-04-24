@@ -34,7 +34,7 @@
         <div class="w-full">
           <p
             class="truncate w-full !leading-normal"
-            :style="{ fontSize: `${filterStore.fontSize}px`, fontFamily: font.family }"
+            :style="{ fontSize: `${filterStore.fontSize}px`, fontFamily: `'${font.family}'` }"
           >
             {{ filterStore.preview || PREVIEW_SENTENCE }}
           </p>
