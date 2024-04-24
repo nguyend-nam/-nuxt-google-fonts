@@ -2,11 +2,8 @@
   <div>
     <Head>
       <Style
-        v-for="font in fontFaces.filter(Boolean).map((f) => f.fontFace)"
-        :id="font"
-        :key="font"
         type="text/css"
-        :children="font"
+        :children="fontFaces.filter(Boolean).map(f => f.fontFace).join(' ')"
       />
       <!-- <Link v-for="menu in fontFaces.filter(Boolean).map(f => f.url)" rel="preload" as="font" :id="menu" :key="menu" :href="menu" /> -->
     </Head>

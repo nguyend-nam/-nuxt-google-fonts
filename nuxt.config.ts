@@ -17,4 +17,7 @@ export default defineNuxtConfig({
   pinia: {
     autoImports: ['defineStore'],
   },
+  routeRules: {
+    '/': { prerender: true, swr: true },
+  }
 });

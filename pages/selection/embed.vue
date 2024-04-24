@@ -2,18 +2,15 @@
   <div>
     <Head>
       <Style
-        v-for="font in fontFaces.filter(Boolean).map((f) => f.fontFace)"
-        :id="font"
-        :key="font"
         type="text/css"
-        :children="font"
+        :children="fontFaces.filter(Boolean).map((f) => f.fontFace).join(' ')"
       />
     </Head>
     <div
       v-if="Object.keys(selectedStore.selected).length === 0"
       class="px-14 pb-4 mt-8 flex flex-col items-center"
     >
-      <p class="text-[200px] text-gray-500">(˚Δ˚)b</p>
+      <p class="text-[200px] text-gray-500">\(^Д^)/</p>
       <p class="text-2xl">You don't have any fonts yet.</p>
       <p class="text-2xl">Choose a font to get started.</p>
       <NuxtLink
