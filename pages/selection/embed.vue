@@ -14,8 +14,8 @@
       class="px-14 pb-4 mt-8 flex flex-col items-center"
     >
       <p class="text-[200px] text-gray-500">(˚Δ˚)b</p>
-      <p class="text-3xl">You don't have any fonts yet.</p>
-      <p class="text-3xl">Choose a font to get started.</p>
+      <p class="text-2xl">You don't have any fonts yet.</p>
+      <p class="text-2xl">Choose a font to get started.</p>
       <NuxtLink
         :href="`${ROUTES.HOME}?${qs.stringify({
           ...(sortStore.criteria !== 'trending' ? { sort: sortStore.criteria } : null),
