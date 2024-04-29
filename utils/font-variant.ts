@@ -36,13 +36,13 @@ export const convertStylesToLink = (styles: SelectedStyle) => {
 <link href="https://fonts.googleapis.com/css2?${familiesLinkQuery}&display=swap" rel="stylesheet">`;
 };
 
-export const convertStylesToCSS = (family: string, variants: SelectedVariant[]) => {
+export const convertStylesToCSS = (family: string, variants: SelectedVariant[], category?: string) => {
   const classes = variants
     .map((variant) => {
       const className = `${family.replace(/ /g, '-')}-${fontWeights[variant.wght as FontWeight]}${variant.ital === '1' ? '-italic' : ''}`;
 
       const styling = `.${className.replace(/ /g, '').toLowerCase()} {
-  font-family: "${family}", sans-serif;
+  font-family: "${family}"${category? `, ${category}` : ''};
   font-weight: ${variant.wght};
   font-style: ${variant.ital === '1' ? 'italic' : 'normal'};
 }`;
