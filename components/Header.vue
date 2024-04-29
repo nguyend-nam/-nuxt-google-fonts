@@ -1,5 +1,7 @@
 <template>
-  <header class="flex justify-between items-center gap-4 h-[88px] px-14 sticky top-0 bg-white z-50">
+  <header
+    class="flex justify-between items-center gap-4 h-[88px] px-6 md:px-14 sticky top-0 bg-white z-50"
+  >
     <h1 class="shrink-0 text-2xl">
       <NuxtLink
         :href="`${ROUTES.HOME}?${qs.stringify({
@@ -7,6 +9,17 @@
           ...(subsetStore.subset !== 'all-languages' ? { subset: subsetStore.subset } : null),
           ...(filterStore.fontSize !== 40 ? { size: filterStore.fontSize } : null),
         })}`"
+        class="md:hidden block"
+      >
+        Fonts
+      </NuxtLink>
+      <NuxtLink
+        :href="`${ROUTES.HOME}?${qs.stringify({
+          ...(sortStore.criteria !== 'trending' ? { sort: sortStore.criteria } : null),
+          ...(subsetStore.subset !== 'all-languages' ? { subset: subsetStore.subset } : null),
+          ...(filterStore.fontSize !== 40 ? { size: filterStore.fontSize } : null),
+        })}`"
+        class="hidden md:block"
       >
         Google Fonts
       </NuxtLink>
@@ -16,7 +29,7 @@
         <SearchOutlined class="text-xl h-5 flex" />
         <Input v-model:value="filterStore.searchTerm" :bordered="false" size="large" />
       </div>
-      <div class="border-l h-[56px] flex items-center px-4">
+      <div class="border-l h-[56px] items-center px-4 hidden md:flex">
         <Select
           v-model:value="sortStore.criteria"
           class="min-w-[160px] !rounded-full"

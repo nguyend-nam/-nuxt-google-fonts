@@ -1,14 +1,14 @@
 <template>
   <div class="mt-8">
     <TypographyTitle :level="3" class="!font-medium">Styles</TypographyTitle>
-    <div class="flex items-center gap-4">
+    <div class="flex flex-col md:flex-row items-stretch md:items-center gap-4">
       <Input
         :value="props.preview"
-        class="w-2/3"
+        class="w-full md:w-2/3"
         size="large"
         @input="(e) => emits('input', e.target.value || '')"
       />
-      <div class="flex gap-2 w-1/3">
+      <div class="flex gap-2 w-full md:w-1/3">
         <Select
           :value="props.fontSize"
           class="min-w-[80px] w-max h-8"

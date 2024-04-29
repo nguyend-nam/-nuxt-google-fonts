@@ -14,7 +14,7 @@
     </Head>
 
     <div v-if="isLoading">
-      <div class="flex flex-col w-full gap-[1px] px-14">
+      <div class="flex flex-col w-full gap-[1px] px-6 md:px-14">
         <div
           v-for="(_, index) in new Array(15).fill(true)"
           :key="index"
@@ -28,13 +28,13 @@
         fonts.filter((f) => f.family.toLowerCase().includes(debouncedSearchTerm.toLowerCase()))
           .length === 0
       "
-      class="px-14 pb-4 mt-8 flex flex-col items-center"
+      class="px-6 md:px-14 pb-4 mt-8 flex flex-col items-center"
     >
       <p class="text-[200px] text-gray-500">(˚Δ˚)b</p>
       <p class="text-2xl">Can't find any fonts.</p>
     </div>
     <div v-else>
-      <div class="h-[calc(100dvh-136px)] overflow-auto px-10 pb-4">
+      <div class="h-[calc(100dvh-136px)] overflow-auto px-2 md:px-10 pb-4">
         <div class="flex flex-col px-4">
           <FontCard
             v-for="font in fonts.filter((f) =>

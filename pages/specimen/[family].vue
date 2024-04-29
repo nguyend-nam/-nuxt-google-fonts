@@ -12,7 +12,7 @@
       />
     </Head>
     <div v-if="isLoading">
-      <div class="px-14 pb-4">
+      <div class="px-6 md:px-14 pb-4">
         <div class="w-full rounded-md bg-gray-100 p-4 animate-pulse h-[60px] mt-8" />
         <div class="w-full rounded-md bg-gray-100 p-4 animate-pulse h-[84px] mt-8" />
         <div class="flex flex-col w-full gap-[1px] mt-12">
@@ -25,8 +25,10 @@
       </div>
     </div>
     <div v-else-if="!!currentFont">
-      <div class="px-14 pb-4">
-        <div class="mt-8 flex items-center gap-4 justify-between">
+      <div class="px-6 md:px-14 pb-4">
+        <div
+          class="mt-8 flex flex-col md:flex-row items-start md:items-center gap-4 justify-between"
+        >
           <h2 class="text-6xl">
             {{ currentFont.family }}
           </h2>
@@ -70,7 +72,7 @@
       </div>
     </div>
     <div v-else>
-      <div class="px-14 pb-4">
+      <div class="px-6 md:px-14 pb-4">
         <h2> Font not found </h2>
       </div>
     </div>

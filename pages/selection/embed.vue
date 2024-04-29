@@ -13,7 +13,7 @@
     </Head>
     <div
       v-if="Object.keys(selectedStore.selected).length === 0"
-      class="px-14 pb-4 mt-8 flex flex-col items-center"
+      class="px-6 md:px-14 pb-4 mt-8 flex flex-col items-center"
     >
       <p class="text-[200px] text-gray-500">\(^Д^)/</p>
       <p class="text-2xl">You don't have any fonts yet.</p>
@@ -28,8 +28,8 @@
         <Button class="mt-8"> Browse fonts </Button>
       </NuxtLink>
     </div>
-    <div v-else class="px-14 pb-4 mt-8 flex justify-between gap-8">
-      <div class="w-1/2">
+    <div v-else class="px-6 md:px-14 pb-4 mt-8 flex flex-col md:flex-row justify-between gap-8">
+      <div class="w-full md:w-1/2">
         <div v-if="isLoading" class="flex flex-col gap-4">
           <div
             v-for="(_, index) in new Array(5).fill(true)"
@@ -39,7 +39,9 @@
         </div>
         <FontManager v-else />
       </div>
-      <div class="w-1/2 shrink-0 h-[calc(100dvh-136px)] overflow-auto sticky top-[120px]">
+      <div
+        class="w-full md:w-1/2 shrink-0 h-max md:h-[calc(100dvh-136px)] overflow-auto sticky top-[120px]"
+      >
         <CodeSnippet :source="convertStylesToLink(selectedStore.selected)">
           <template #title>
             Embed code in the <code class="!border-none">&lt;head&gt;</code> of your html

@@ -3,7 +3,13 @@
     <CodeSnippet
       v-for="family in Object.keys(selectedStore.selected)"
       :key="family"
-      :source="convertStylesToCSS(family, selectedStore.selected[family], fonts.find((font) => font.family === family)?.category)"
+      :source="
+        convertStylesToCSS(
+          family,
+          selectedStore.selected[family],
+          fonts.find((font) => font.family === family)?.category,
+        )
+      "
       class="mt-8"
     >
       <template #title> {{ family }}: CSS classes </template>
