@@ -20,14 +20,14 @@ export const useFetchFonts = async () => {
   const params = ref({});
 
   watch(
-    [sortStore, subsetStore],
+    () => [sortStore, subsetStore],
     () => {
       params.value = {
         sort: sortStore.criteria,
         subset: subsetStore.subset === 'all-languages' ? '' : subsetStore.subset,
       };
     },
-    { immediate: true },
+    { immediate: true, deep: true },
   );
 
   try {
@@ -44,21 +44,25 @@ export const useFetchFonts = async () => {
     isLoading.value = false;
   }
 
-  watch(params, async () => {
-    try {
-      isLoading.value = true;
-      const res: GetFontsResponse = await $fetch(
-        `${GOOGLE_FONTS_BASE_URL}/webfonts?key=${config.public.apiKey}&${qs.stringify(params.value)}`,
-      );
-      fonts.value = res?.items;
-    } catch (error) {
-      notification.error({
-        message: 'Could not fetch fonts',
-      });
-    } finally {
-      isLoading.value = false;
-    }
-  });
+  watch(
+    () => params,
+    async () => {
+      try {
+        isLoading.value = true;
+        const res: GetFontsResponse = await $fetch(
+          `${GOOGLE_FONTS_BASE_URL}/webfonts?key=${config.public.apiKey}&${qs.stringify(params.value)}`,
+        );
+        fonts.value = res?.items;
+      } catch (error) {
+        notification.error({
+          message: 'Could not fetch fonts',
+        });
+      } finally {
+        isLoading.value = false;
+      }
+    },
+    { immediate: true, deep: true },
+  );
 
   watchDebounced(
     () => [sortStore.criteria, subsetStore.subset, filterStore.fontSize],

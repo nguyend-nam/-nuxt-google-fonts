@@ -20,18 +20,18 @@ export const useFetchFontsV2 = async () => {
   const params = ref({});
 
   watch(
-    [sortStore, subsetStore],
+    () => [sortStore, subsetStore],
     () => {
       params.value = {
         sort: sortStore.criteria,
         subset: subsetStore.subset === 'all-languages' ? '' : subsetStore.subset,
       };
     },
-    { immediate: true },
+    { immediate: true, deep: true },
   );
 
   watch(
-    params,
+    () => params,
     async () => {
       await useFetch<GetFontsResponse>(
         `${GOOGLE_FONTS_BASE_URL}/webfonts?key=${config.public.apiKey}&${qs.stringify(params.value)}`,
@@ -58,7 +58,7 @@ export const useFetchFontsV2 = async () => {
         },
       );
     },
-    { immediate: true },
+    { immediate: true, deep: true },
   );
 
   watchDebounced(

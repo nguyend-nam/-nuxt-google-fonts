@@ -3,24 +3,28 @@
     <Head>
       <Style
         type="text/css"
-        :children="fontFaces.filter(Boolean).map((f) => f.fontFace).join(' ')"
+        :children="
+          fontFaces
+            .filter(Boolean)
+            .map((f) => f.fontFace)
+            .join(' ')
+        "
       />
     </Head>
     <div v-if="isLoading">
-      <div class="flex flex-col w-full gap-[1px] px-14 pb-4">
-        <div
-          v-for="(_, index) in new Array(15).fill(true)"
-          :key="index"
-          class="w-full rounded-md bg-gray-100 p-4 animate-pulse h-[157px]"
-        />
-      </div>
-    </div>
-    <div v-else-if="!currentFont">
       <div class="px-14 pb-4">
-        <h2> Font not found </h2>
+        <div class="w-full rounded-md bg-gray-100 p-4 animate-pulse h-[60px] mt-8" />
+        <div class="w-full rounded-md bg-gray-100 p-4 animate-pulse h-[84px] mt-8" />
+        <div class="flex flex-col w-full gap-[1px] mt-12">
+          <div
+            v-for="(_, index) in new Array(5).fill(true)"
+            :key="index"
+            class="w-full rounded-md bg-gray-100 p-4 animate-pulse h-[132px]"
+          />
+        </div>
       </div>
     </div>
-    <div v-else>
+    <div v-else-if="!!currentFont">
       <div class="px-14 pb-4">
         <div class="mt-8 flex items-center gap-4 justify-between">
           <h2 class="text-6xl">
@@ -28,7 +32,6 @@
           </h2>
           <Button
             v-if="selectedStore.isStored(currentFont.family)"
-            type="primary"
             @click="() => selectedStore.removeSelectedStyle(currentFont?.family || '')"
             >Remove font family</Button
           >
@@ -66,6 +69,11 @@
         </div>
       </div>
     </div>
+    <div v-else>
+      <div class="px-14 pb-4">
+        <h2> Font not found </h2>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -83,20 +91,24 @@ const { fonts, isLoading } = await useFetchAllFontsV2();
 const route = useRoute();
 const currentFont = ref<FontItem | null>(null);
 
-watchEffect(() => {
-  const currentFontData = fonts.value.find(
-    (font) => font.family === convertParamToFamily(route.params.family as string),
-  );
+watch(
+  () => [fonts, route.params],
+  () => {
+    const currentFontData = fonts.value.find(
+      (font) => font.family === convertParamToFamily(route.params.family as string),
+    );
 
-  if (currentFontData) {
-    currentFont.value = currentFontData;
-  }
-});
+    if (currentFontData) {
+      currentFont.value = currentFontData;
+    }
+  },
+  { immediate: true, deep: true },
+);
 
 const fontFaces = ref<{ fontFace: string }[]>([]);
 
 watch(
-  [currentFont.value?.variants, fonts],
+  () => [currentFont, fonts],
   () => {
     if (!!currentFont.value && currentFont.value?.variants.length > 0) {
       currentFont.value?.variants.forEach((variant) => {
@@ -121,7 +133,7 @@ watch(
       });
     }
   },
-  { immediate: true },
+  { immediate: true, deep: true },
 );
 
 const variantStyles: {
@@ -133,40 +145,46 @@ const variantStyles: {
   fontCategory: string;
 }[] = [];
 
-if (currentFont.value) {
-  const { subsets, family } = currentFont.value;
-  for (let i = 0; i < currentFont.value.variants.length; i++) {
-    const fontDetails = currentFont.value;
+watch(
+  () => [currentFont, fonts],
+  () => {
+    if (currentFont.value) {
+      const { subsets, family } = currentFont.value;
+      for (let i = 0; i < currentFont.value.variants.length; i++) {
+        const fontDetails = currentFont.value;
 
-    if (fontDetails.variants[i].includes('italic')) {
-      const props = {
-        fontFamily: `"${family} script=${subsets.includes('latin') ? 'latin' : subsets[0]} rev=1"`,
-        fontWeight: `${
-          fontDetails.variants[i].slice(0, 3) === 'ita'
-            ? '400'
-            : fontDetails.variants[i].slice(0, 3)
-        }` as FontWeight,
-        fontStyle: `italic`,
-        fontStretch: `normal`,
-        lineHeight: `initial`,
-        fontCategory: fontDetails.category,
-      };
-      variantStyles.push(props);
-    } else {
-      const props = {
-        fontFamily: `"${family} script=${subsets.includes('latin') ? 'latin' : subsets[0]} rev=1"`,
-        fontWeight: `${
-          fontDetails.variants[i] === 'regular' ? '400' : fontDetails.variants[i]
-        }` as FontWeight,
-        fontStyle: `regular`,
-        fontStretch: `normal`,
-        lineHeight: `initial`,
-        fontCategory: fontDetails.category,
-      };
-      variantStyles.push(props);
+        if (fontDetails.variants[i].includes('italic')) {
+          const props = {
+            fontFamily: `"${family} script=${subsets.includes('latin') ? 'latin' : subsets[0]} rev=1"`,
+            fontWeight: `${
+              fontDetails.variants[i].slice(0, 3) === 'ita'
+                ? '400'
+                : fontDetails.variants[i].slice(0, 3)
+            }` as FontWeight,
+            fontStyle: `italic`,
+            fontStretch: `normal`,
+            lineHeight: `initial`,
+            fontCategory: fontDetails.category,
+          };
+          variantStyles.push(props);
+        } else {
+          const props = {
+            fontFamily: `"${family} script=${subsets.includes('latin') ? 'latin' : subsets[0]} rev=1"`,
+            fontWeight: `${
+              fontDetails.variants[i] === 'regular' ? '400' : fontDetails.variants[i]
+            }` as FontWeight,
+            fontStyle: `regular`,
+            fontStretch: `normal`,
+            lineHeight: `initial`,
+            fontCategory: fontDetails.category,
+          };
+          variantStyles.push(props);
+        }
+      }
     }
-  }
-}
+  },
+  { immediate: true, deep: true },
+);
 
 const fontDetailPreview = ref<string>(FONT_DETAIL_PREVIEW_SENTENCE);
 

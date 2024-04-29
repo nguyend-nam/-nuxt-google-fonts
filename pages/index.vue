@@ -3,7 +3,12 @@
     <Head>
       <Style
         type="text/css"
-        :children="fontFaces.filter(Boolean).map(f => f.fontFace).join(' ')"
+        :children="
+          fontFaces
+            .filter(Boolean)
+            .map((f) => f.fontFace)
+            .join(' ')
+        "
       />
       <!-- <Link v-for="menu in fontFaces.filter(Boolean).map(f => f.url)" rel="preload" as="font" :id="menu" :key="menu" :href="menu" /> -->
     </Head>
@@ -47,8 +52,6 @@
 <script setup lang="ts">
 import { useFilter } from '~/stores/filter';
 import { watchDebounced } from '@vueuse/core';
-import { useSubset } from '~/stores/subset';
-import { useSort } from '~/stores/sort';
 
 const { fonts, isLoading } = await useFetchFontsV2();
 

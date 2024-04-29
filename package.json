@@ -10,8 +10,7 @@
     "postinstall": "nuxt prepare",
     "lint": "yarn lint:eslint && yarn lint:prettier",
     "lint:eslint": "npx eslint .",
-    "lint:prettier": "npx prettier . --check",
-    "lintfix": "npx prettier --write --list-different . && npx eslint . --fix"
+    "lint:prettier": "npx prettier . --check"
   },
   "dependencies": {
     "@pinia-plugin-persistedstate/nuxt": "1.0.0",

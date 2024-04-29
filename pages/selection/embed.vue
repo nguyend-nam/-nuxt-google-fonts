@@ -3,7 +3,12 @@
     <Head>
       <Style
         type="text/css"
-        :children="fontFaces.filter(Boolean).map((f) => f.fontFace).join(' ')"
+        :children="
+          fontFaces
+            .filter(Boolean)
+            .map((f) => f.fontFace)
+            .join(' ')
+        "
       />
     </Head>
     <div
@@ -24,7 +29,16 @@
       </NuxtLink>
     </div>
     <div v-else class="px-14 pb-4 mt-8 flex justify-between gap-8">
-      <FontManager v-if="!isLoading" />
+      <div class="w-1/2">
+        <div v-if="isLoading" class="flex flex-col gap-4">
+          <div
+            v-for="(_, index) in new Array(5).fill(true)"
+            :key="index"
+            class="w-full rounded-md bg-gray-100 animate-pulse h-[168px]"
+          />
+        </div>
+        <FontManager v-else />
+      </div>
       <div class="w-1/2 shrink-0 h-[calc(100dvh-136px)] overflow-auto sticky top-[120px]">
         <CodeSnippet :source="convertStylesToLink(selectedStore.selected)">
           <template #title>
@@ -59,7 +73,7 @@ definePageMeta({
 const fontFaces = ref<{ fontFace: string }[]>([]);
 
 watch(
-  [selectedStore.selected, fonts],
+  () => [selectedStore.selected, fonts],
   () => {
     if (Object.keys(selectedStore.selected).length > 0) {
       fonts.value
@@ -79,7 +93,7 @@ watch(
         });
     }
   },
-  { immediate: true },
+  { immediate: true, deep: true },
 );
 
 onUnmounted(() => {

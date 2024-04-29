@@ -1,14 +1,14 @@
 <template>
   <div>
     <div
-      v-if="!isLoading && Object.keys(props).length > 0"
+      v-if="!isLoading && Object.keys(props.data).length > 0"
       class="p-4 border border-gray-200 rounded-md"
     >
       <TypographyTitle :level="4" class="!font-normal !text-base">{{
-        Object.keys(props.data)[0]
+        currentFont?.family
       }}</TypographyTitle>
       <p
-        :style="`font-family: ${Object.keys(props.data)[0]}`"
+        :style="`font-family: '${currentFont?.family}'`"
         class="text-4xl line-clamp-1 leading-normal"
         >{{ FONT_DETAIL_PREVIEW_SENTENCE }}</p
       >
@@ -39,17 +39,21 @@ const selectedStore = useSelected();
 
 const currentFont = ref<FontItem | null>(null);
 
-watchEffect(() => {
-  if (Object.keys(props).length > 0) {
-    const currentFontData = fonts.value.find(
-      (font) => font.family === convertParamToFamily(Object.keys(props)[0]),
-    );
+watch(
+  () => [fonts],
+  () => {
+    if (Object.keys(props).length > 0) {
+      const currentFontData = fonts.value.find(
+        (font) => font.family === convertParamToFamily(Object.keys(props.data)[0]),
+      );
 
-    if (currentFontData) {
-      currentFont.value = currentFontData;
+      if (currentFontData) {
+        currentFont.value = currentFontData;
+      }
     }
-  }
-});
+  },
+  { immediate: true, deep: true },
+);
 </script>
 
 <style scoped></style>

@@ -26,7 +26,7 @@ watch(
     filterStore.setPreview(route.query?.preview || '');
     filterStore.setFontSize(Number(route.query?.size) || 40);
   },
-  { immediate: true },
+  { immediate: true, deep: true },
 );
 </script>
 
